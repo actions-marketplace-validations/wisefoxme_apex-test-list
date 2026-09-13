@@ -1,5 +1,15 @@
 version: 2
 updates:
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'monthly'
+    commit-message:
+      prefix: 'build'
+    groups:
+      github-actions:
+        patterns:
+          - '*'
   - package-ecosystem: 'npm'
     directory: '/'
     schedule:
@@ -16,20 +26,8 @@ updates:
       prefix: fix(deps)
       # no release for dev-deps
       prefix-development: chore(dev-deps)
-    ignore:
-      - dependency-name: '@salesforce/dev-scripts'
-      - dependency-name: '*'
-        update-types: ['version-update:semver-major']
     groups:
-      stryker:
-        patterns:
-          - '@stryker-mutator/*'
-      vitest:
-        patterns:
-          - 'vitest'
-          - '@vitest/*'
-      salesforce:
-        patterns:
-          - '@salesforce/*'
-          - '@oclif/*'
-          - 'oclif'
+      dependencies:
+        dependency-type: 'production'
+      dev-dependencies:
+        dependency-type: 'development'

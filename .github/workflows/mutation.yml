@@ -30,12 +30,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Setup Node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: 'lts/*'
           cache: npm
@@ -47,6 +47,9 @@ jobs:
       - name: Build
         run: npm run compile
 
+      - name: Pin TypeScript for Stryker (TS7 unsupported)
+        run: npm install typescript@6.0.3 --no-save
+
       - name: Run incremental mutation testing
         env:
           MUTATION_BASE_BRANCH: origin/${{ github.base_ref }}
@@ -54,7 +57,7 @@ jobs:
 
       - name: Post mutation results comment
         if: always() && github.event_name == 'pull_request'
-        uses: marocchino/sticky-pull-request-comment@v2
+        uses: marocchino/sticky-pull-request-comment@v3
         with:
           header: stryker-mutation
           path: reports/mutation/comment.md
@@ -74,12 +77,12 @@ jobs:
     timeout-minutes: 120
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Setup Node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: 'lts/*'
           cache: npm
@@ -90,6 +93,9 @@ jobs:
 
       - name: Build
         run: npm run compile
+
+      - name: Pin TypeScript for Stryker (TS7 unsupported)
+        run: npm install typescript@6.0.3 --no-save
 
       - name: Run mutation testing
         # GitHub-hosted ubuntu-latest runners have 4 cores (as of 2026). Stryker
